@@ -18,7 +18,6 @@ To install a development version of the package from GitHub:
 
 
 ``` r
-Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
 if (!require("remotes")) install.packages("remotes")
 remotes::install_github("mariosandovalmx/ggsmatr")
 ```
