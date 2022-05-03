@@ -1,0 +1,28 @@
+Package: ggsmatr
+Title: 'ggplot2' Based SMATR Plots 
+Version: 0.1
+Authors@R: 
+    person(given = "Mario A.",
+           family = "Sandoval-Molina",
+           role = c("aut", "cre"),
+           email = "sandoval.m@hotmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-8536-6006"))
+Description: Create a scatter plot based on the coefficients from (Standardised) Major Axis Estimation fit.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports:
+  graphics,
+  dplyr,
+  tibble,
+  ggplot2,
+  datasets,
+  rlang,
+  scales,
+  magrittr,
+  smatr
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

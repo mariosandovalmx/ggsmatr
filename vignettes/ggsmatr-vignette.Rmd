@@ -1,0 +1,23 @@
+---
+title: "ggsmatr-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ggsmatr-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ggsmatr)
+data(iris)
+library(smatr)
+fit <- sma(Petal.Width ~ Petal.Length+ Species, data=iris)
+ggsmatr(data =  iris, groups = "Species", xvar =  "Petal.Length", yvar = "Petal.Width", sma.fit =  fit)
+```
