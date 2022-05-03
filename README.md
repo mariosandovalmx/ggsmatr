@@ -38,7 +38,7 @@ theme(legend.position = "top")
 <br />
 <p align="center">
   <a href="">
-    <img src="https://github.com/mariosandovalmx/ecology/blob/3f7a8cf7100d008de02c081a63d65e7bc3aadd13/images/ggsmatr.jpg" alt="ggsmatr" width="1500" height="400">
+    <img src="https://github.com/mariosandovalmx/ecology/blob/main/images/ggsmatr.jpeg?raw=true" alt="ggsmatr" width="1500" height="400">
   </a>
 </p>
 
