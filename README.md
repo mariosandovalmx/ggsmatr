@@ -28,8 +28,11 @@ Usage example:
 ``` r
 library(ggsmatr)
 library(ggplot2)
-
-ggsmatr(data =  df_clad, groups = "Sex", xvar =  "X axis", yvar = "Y axis", sma.fit =  fit) + 
+library(smatr)
+fit = sma(Yaxis ~ Xaxis + Sex, data = df,shift=T, elev.test=T)
+summary(fit)
+#
+ggsmatr(data =  df, groups = "Sex", xvar =  "Xaxis", yvar = "Yaxis", sma.fit =  fit) + 
 theme(legend.position = "top", legend.title=element_blank())+ 
 ylab("Y axis")+ 
 xlab("X axis")+ 
