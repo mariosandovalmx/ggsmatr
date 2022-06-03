@@ -63,7 +63,7 @@ ggsmatr <- function(data, groups, xvar, yvar, sma.fit){
   station_cols = scales::hue_pal()(length(grps.df))
   names(station_cols) <- unique(data[[groups]])
 
-  fitsall <- sma.fit$groupsummary %>% select(group , r2, pval, Slope, Int)
+  fitsall <- sma.fit$groupsummary %>% dplyr::select(group , r2, pval, Slope, Int)
   fitsall <- fitsall %>%  mutate_if(is.numeric, round, digits = 3)
   fitsall
 
