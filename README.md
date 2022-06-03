@@ -36,7 +36,7 @@ theme(legend.position = "top", legend.title=element_blank())+
 ylab("Y axis")+ 
 xlab("X axis")+ 
 theme(legend.position = "top")+
-scale_color_manual(values = c("FARMLAND" = "red", "FOREST" = "blue"))
+scale_color_manual(values = c("Female" = "red", "Male" = "blue"))
 ```
 <br />
 <p align="center">
