@@ -77,8 +77,8 @@ ggsmatr <- function(data, groups, xvar, yvar, sma.fit){
   # calcular minimo y maximo del eje x para cada sitio
   bb2 <- data %>% dplyr::select(groups, xvar) %>%  dplyr::group_by(.data[[groups]]) %>%
     dplyr::summarise(dplyr::across(.cols = xvar,
-                            .fns = list(min = min, max = max),
-                            .names = "{fn}_x"))
+                                   .fns = list(min = min, max = max),
+                                   .names = "{fn}_x"))
   names(bb2)[1] <- 'group'
 
 
@@ -96,11 +96,11 @@ ggsmatr <- function(data, groups, xvar, yvar, sma.fit){
   print(df.pl[,c(1,8,9)])
 
   ggp <-  ggplot2::ggplot(data = data, ggplot2::aes(x = !! x.var,
-                                            y = !! y.var,
-                                            color= !! grp,
-                                            fill= !! grp)) +
+                                                    y = !! y.var,
+                                                    color= !! grp,
+                                                    fill= !! grp)) +
     ggplot2::geom_point(size=3) +
-    geom_segment(data = df.pl ,ggplot2::aes(x= min_x, xend= max_x, y=min_y, yend=max_y),inherit.aes = FALSE, color= station_cols)
+    geom_segment(data = df.pl ,ggplot2::aes(x= min_x, xend= max_x, y=min_y, yend=max_y, colour= group),inherit.aes = FALSE)
 
 
   .GlobalEnv$ggp <- ggp
