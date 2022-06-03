@@ -25,7 +25,8 @@
 #' #yvar ="EvennesObserved", sma.fit =  fit)
 #' #Plot is saved as ggp object, and can be edited using ggplot parameters.
 #' #ggp + xlab("x axis name") + ylab("y axis name") +theme(legend.position = "right",
-#' #legend.title=element_blank())
+#' #legend.title=element_blank()) +
+#' #scale_color_manual(values = c("FARMLAND" = "red", "FOREST" = "blue"))
 #' @encoding UTF-8
 #' @importFrom graphics plot
 #' @importFrom dplyr mutate_if
