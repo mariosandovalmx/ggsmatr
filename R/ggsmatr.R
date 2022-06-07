@@ -12,21 +12,20 @@
 #' @export
 #'
 #' @examples
-#' #data(iris)
-#' #library(smatr)
-#' #fit <- sma(Petal.Width ~ Petal.Length+ Species, data=iris)
-#' #ggsmatr(data =  iris, groups = "Species", xvar =  "Petal.Length", yvar =
-#' #"Petal.Width", sma.fit =  fit)
+#' data(iris)
+#' library(ggsmatr)
+#' library(smatr)
+#' library(ggplot2)
+#' data(iris)
+#' fit <- sma(Petal.Width ~ Petal.Length+ Species, data=iris)
+#' ggsmatr(data =  iris, groups = "Species", xvar =  "Petal.Length",
+#' yvar = "Petal.Width", sma.fit =  fit)
+#' # modify plot
+#' library(ggplot2)
+#' ggp + xlab("x axis name") + ylab("y axis name") +theme(legend.position = "right",
+#' legend.title=element_blank()) +
+#' scale_colour_manual(values = c("black","firebrick", "cornflowerblue"))
 #'
-#' #Do not run, just examples.
-#' #ggsmatr(data =  df1, groups = "Site", xvar =  "Point.count", yvar =
-#' #"Mist.nets", sma.fit =  fit)
-#' #ggsmatr(data =  evdata, groups = "site.method", xvar =  "Species.richness",
-#' #yvar ="EvennesObserved", sma.fit =  fit)
-#' #Plot is saved as ggp object, and can be edited using ggplot parameters.
-#' #ggp + xlab("x axis name") + ylab("y axis name") +theme(legend.position = "right",
-#' #legend.title=element_blank()) +
-#' #scale_color_manual(values = c("FARMLAND" = "red", "FOREST" = "blue"))
 #' @encoding UTF-8
 #' @importFrom graphics plot
 #' @importFrom dplyr mutate_if
@@ -42,6 +41,7 @@
 #' @importFrom stats coef
 #' @importFrom stats na.omit
 ggsmatr <- function(data, groups, xvar, yvar, sma.fit){
+
 
 
   x.var <- rlang::sym(xvar)
@@ -100,8 +100,8 @@ ggsmatr <- function(data, groups, xvar, yvar, sma.fit){
                                                     y = !! y.var,
                                                     color= !! grp,
                                                     fill= !! grp)) +
-    ggplot2::geom_point(size=3) +
-    geom_segment(data = df.pl ,ggplot2::aes(x= min_x, xend= max_x, y=min_y, yend=max_y, colour= group),inherit.aes = FALSE)
+    ggplot2::geom_point(size=2, alpha = 0.5) +
+    geom_segment(data = df.pl ,ggplot2::aes(x= min_x, xend= max_x, y=min_y, yend=max_y, colour= group),inherit.aes = FALSE, size= 1)
 
 
   .GlobalEnv$ggp <- ggp

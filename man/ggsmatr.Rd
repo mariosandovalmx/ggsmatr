@@ -25,19 +25,18 @@ ggplot based plot of sma.
 Create a scatter plot based on the coefficients from (Standardised) Major Axis Estimation fit.
 }
 \examples{
-#data(iris)
-#library(smatr)
-#fit <- sma(Petal.Width ~ Petal.Length+ Species, data=iris)
-#ggsmatr(data =  iris, groups = "Species", xvar =  "Petal.Length", yvar =
-#"Petal.Width", sma.fit =  fit)
+data(iris)
+library(ggsmatr)
+library(smatr)
+library(ggplot2)
+data(iris)
+fit <- sma(Petal.Width ~ Petal.Length+ Species, data=iris)
+ggsmatr(data =  iris, groups = "Species", xvar =  "Petal.Length",
+yvar = "Petal.Width", sma.fit =  fit)
+# modify plot
+library(ggplot2)
+ggp + xlab("x axis name") + ylab("y axis name") +theme(legend.position = "right",
+legend.title=element_blank()) +
+scale_colour_manual(values = c("black","firebrick", "cornflowerblue"))
 
-#Do not run, just examples.
-#ggsmatr(data =  df1, groups = "Site", xvar =  "Point.count", yvar =
-#"Mist.nets", sma.fit =  fit)
-#ggsmatr(data =  evdata, groups = "site.method", xvar =  "Species.richness",
-#yvar ="EvennesObserved", sma.fit =  fit)
-#Plot is saved as ggp object, and can be edited using ggplot parameters.
-#ggp + xlab("x axis name") + ylab("y axis name") +theme(legend.position = "right",
-#legend.title=element_blank()) +
-#scale_color_manual(values = c("FARMLAND" = "red", "FOREST" = "blue"))
 }
