@@ -4,14 +4,14 @@ Version: 0.1
 Authors@R: 
     person("Mario A.", "Sandoval-Molina", , "sandoval.m@hotmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8536-6006"))
-Description: Create a ggplot - scatter plot based on the coefficients from
-    (Standardised) Major Axis Estimation fit.
+Description: The "ggsmatr" provides a simple and efficient way to visualize the coefficients of the (Standardized) Major Axis Estimation fit from the "smatr" package using ggplot2. With just a few lines of code, users can create clear and customizable scatterplots that highlight the relationships between variables. This package is a valuable tool for researchers and data analysts looking to explore and communicate their data in a visually appealing way.
 License: MIT + file LICENSE
 Imports: 
     dplyr,
     ggplot2,
     rlang,
     scales,
+    insight,
     stats,
     tibble
 Suggests: 
