@@ -1,6 +1,8 @@
+
+^dev$
+^LICENSE\.md$
 ^ggsmatr\.Rproj$
 ^\.Rproj\.user$
-^LICENSE\.md$
-^doc$
-^Meta$
-^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
