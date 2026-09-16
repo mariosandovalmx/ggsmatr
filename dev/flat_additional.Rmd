@@ -20,11 +20,9 @@ pkgload::load_all(export_all = FALSE)
 #' global functions - do not run
 #'
 #' Global functions
-#' @return nothing
-#' @keywords internal
-#' @export
+#' @noRd
 #'
-utils::globalVariables(c(".data", "Int", "Slope","elevation","group","max_x", "max_y","min_x", "xmin", "min_y", "pval", "r2", "slope","coef"))
+utils::globalVariables(c(".data", "Int", "Slope","Slope_lowCI","Slope_highCI","elevation","group","max_x", "max_y","min_x", "xmin", "min_y", "pval", "r2", "slope","coef","x","ymin","ymax","xbar","ybar"))
 ```
 
 

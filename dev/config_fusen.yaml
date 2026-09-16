@@ -1,0 +1,30 @@
+flat_additional.Rmd:
+  path: dev/flat_additional.Rmd
+  state: active
+  R: R/global.R
+  tests: []
+  vignettes: []
+  inflate:
+    flat_file: dev/flat_additional.Rmd
+    vignette_name: .na
+    open_vignette: false
+    check: false
+    document: true
+    overwrite: 'yes'
+    clean: false
+    codecov: false
+flat_full.Rmd:
+  path: dev/flat_full.Rmd
+  state: active
+  R: R/ggsmatr.R
+  tests: tests/testthat/test-ggsmatr.R
+  vignettes: vignettes/ggsmatr-example.Rmd
+  inflate:
+    flat_file: dev/flat_full.Rmd
+    vignette_name: ggsmatr example
+    open_vignette: false
+    check: false
+    document: true
+    overwrite: 'yes'
+    clean: false
+    codecov: false

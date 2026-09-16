@@ -4,7 +4,7 @@
 \alias{ggsmatr}
 \title{ggsmatr 'ggplot2' based SMATR plots}
 \usage{
-ggsmatr(data, groups , xvar , yvar, sma.fit)
+ggsmatr(data, groups, xvar, yvar, sma.fit, ci = FALSE, ci.alpha = 0.2, n = 100)
 }
 \arguments{
 \item{data}{a dataframe.}
@@ -16,6 +16,12 @@ ggsmatr(data, groups , xvar , yvar, sma.fit)
 \item{yvar}{y variable for drawing.}
 
 \item{sma.fit}{an sma or ma object fitted in SMATR package.}
+
+\item{ci}{logical. If TRUE, add a parametric confidence ribbon for the SMA slope, using the slope confidence intervals stored in \code{sma.fit} (set the level with \code{sma(..., alpha = )}). Given that SMA lines pass through the group centroid, the ribbon is a slope-CI envelope pivoted at each group mean, and it is not related with the OLS band of \code{geom_smooth()}. Default is FALSE.}
+
+\item{ci.alpha}{Alpha transparency passed to \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}. Default is 0.2.}
+
+\item{n}{Number of x values at which the confidence ribbon is evaluated in each group. Default is 100.}
 }
 \value{
 ggplot based plot of sma.
@@ -30,16 +36,23 @@ df.iris <- read.csv(datafile, encoding = "UTF-8")
 library(ggsmatr)
 library(ggplot2)
 library(smatr)
-fit = sma(Sepal.Length ~ Sepal.Width + Species, 
-          data = df.iris,shift=TRUE, elev.test=TRUE)
-#
-ggsmatr(data =  df.iris, groups = "Species", 
-        xvar =  "Sepal.Width", yvar = "Sepal.Length", 
-        sma.fit =  fit) + 
-theme(legend.position = "top", legend.title=element_blank())+ 
-ylab("Sepal.Length")+ 
-xlab("Sepal.Width")+ 
-theme(legend.position = "top")
+fit <- sma(Sepal.Length ~ Sepal.Width + Species,
+           data = df.iris, shift = TRUE, elev.test = TRUE, alpha = 0.05)
+
+ggsmatr(data = df.iris, groups = "Species",
+        xvar = "Sepal.Width", yvar = "Sepal.Length",
+        sma.fit = fit) +
+  theme(legend.position = "top", legend.title = element_blank()) +
+  ylab("Sepal.Length") +
+  xlab("Sepal.Width")
+
+# parametric slope-CI ribbon, using the intervals already stored in the sma fit
+ggsmatr(data = df.iris, groups = "Species",
+        xvar = "Sepal.Width", yvar = "Sepal.Length",
+        sma.fit = fit, ci = TRUE) +
+  theme(legend.position = "top", legend.title = element_blank()) +
+  ylab("Sepal.Length") +
+  xlab("Sepal.Width")
 
 
 }

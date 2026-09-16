@@ -1,19 +1,29 @@
 Package: ggsmatr
 Title: Ggsmatr
-Version: 0.1
+Version: 0.2.0
 Authors@R: 
     person("Mario A.", "Sandoval-Molina", , "sandoval.m@hotmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8536-6006"))
-Description: The "ggsmatr" provides a simple and efficient way to visualize the coefficients of the (Standardized) Major Axis Estimation fit from the "smatr" package using ggplot2. With just a few lines of code, users can create clear and customizable scatterplots that highlight the relationships between variables. This package is a valuable tool for researchers and data analysts looking to explore and communicate their data in a visually appealing way.
+Description: The "ggsmatr" package provides a simple and efficient way to
+    visualize the coefficients of the (Standardized) Major Axis Estimation
+    fit from the "smatr" package using ggplot2. With just a few lines of
+    code, users can create grouped scatterplots with fitted SMA lines and
+    optional parametric confidence ribbons for the slope. This package is a
+    valuable tool for researchers and data analysts looking to explore and
+    communicate their data in a visually appealing way.
 License: MIT + file LICENSE
+URL: https://github.com/mariosandovalmx/ggsmatr,
+    https://mariosandovalmx.github.io/ggsmatr/
+BugReports: https://github.com/mariosandovalmx/ggsmatr/issues
 Imports: 
     dplyr,
     ggplot2,
+    insight,
     rlang,
     scales,
-    insight,
     stats,
-    tibble
+    tibble,
+    utils
 Suggests: 
     knitr,
     rmarkdown,
@@ -21,6 +31,8 @@ Suggests:
     testthat
 VignetteBuilder: 
     knitr
+Config/fusen/version: 0.7.2
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 8.0.0

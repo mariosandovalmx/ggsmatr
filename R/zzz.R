@@ -13,7 +13,7 @@
   texto<- paste("El paquete ggsmatr se ha cargado con \u00e9xito. \u00a1Espero que lo disfrutes!\n", "Email de contacto: sandoval.m@hotmail.com \n", sep=" ")
   insight::print_color(texto, "cyan")
 
-  texto2<- paste("Para citar este paquete: Mario A. Sandoval-Molina (2023). ggsmatr: a simple and efficient way to visualize the coefficients of the (Standardized) Major Axis Estimation fit. R package version 0.1.", sep=" ")
+  texto2<- paste("Para citar este paquete: Mario A. Sandoval-Molina (2026). ggsmatr: a simple and efficient way to visualize the coefficients of the (Standardized) Major Axis Estimation fit. R package version 0.2.0.", sep=" ")
   insight::print_color(texto2, "green")
 
 

@@ -1,8 +1,9 @@
-
-^dev$
-^LICENSE\.md$
-^ggsmatr\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
-^_pkgdown\.yml$
+^\.positai$
+^\.claude$
+^ggsmatr\.Rproj$
+^dev$
 ^docs$
-^pkgdown$
+^\.Rhistory$
+^\.gitignore$

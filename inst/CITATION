@@ -1,0 +1,10 @@
+citHeader("To cite ggsmatr in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title   = "ggsmatr: ggplot2 based plots for (standardised) major axis estimation",
+  author  = person("Mario A.", "Sandoval-Molina"),
+  year    = "2026",
+  note    = "R package version 0.2.0",
+  url     = "https://github.com/mariosandovalmx/ggsmatr"
+)
