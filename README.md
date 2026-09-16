@@ -74,6 +74,8 @@ ggsmatr(
   xlab("Sepal.Width")
 ```
 
+![Grouped SMA plot for iris sepal width and sepal length](man/figures/iris-sma.png)
+
 ### 4. Add a parametric confidence ribbon
 
 SMA is not OLS, so `geom_smooth(se = TRUE)` is not related with the intervals stored in the `smatr` fit. Set `ci = TRUE` to draw a slope-CI envelope pivoted at each group centroid:
@@ -94,6 +96,8 @@ ggsmatr(
   ylab("Sepal.Length") +
   xlab("Sepal.Width")
 ```
+
+![Grouped SMA plot with parametric slope confidence ribbons](man/figures/iris-sma-ci.png)
 
 The ribbon can be tuned with `ci.alpha` (transparency) and `n` (number of x values evaluated in each group):
 

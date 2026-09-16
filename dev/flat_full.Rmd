@@ -179,8 +179,7 @@ ggsmatr <- function(data, groups, xvar, yvar, sma.fit, ci = FALSE, ci.alpha = 0.
 
   ggp <-  ggplot2::ggplot(data = data, ggplot2::aes(x = !! x.var,
                                                     y = !! y.var,
-                                                    color= !! grp,
-                                                    fill= !! grp))
+                                                    color= !! grp))
 
   if (isTRUE(ci)) {
     ggp <- ggp +
