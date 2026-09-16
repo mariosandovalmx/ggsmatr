@@ -126,13 +126,38 @@ SMA by group.</p>
 </h2>
 <p>Given that SMA lines pass through the group centroid, the presence of
 a parametric confidence ribbon can be added with <code>ci = TRUE</code>.
-The ribbon uses the slope confidence intervals already stored in the
-<code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">sma()</a></code> fit (<code>Slope_lowCI</code> and
+The ribbon is related with the slope confidence intervals already stored
+in the <code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">sma()</a></code> fit (<code>Slope_lowCI</code> and
 <code>Slope_highCI</code>), and it is not related with the OLS band of
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code>.</p>
 <p>The confidence level is the one used when the model is fitted, for
-example <code>sma(..., alpha = 0.05)</code> for 95% intervals.</p>
+example <code>sma(..., alpha = 0.05)</code> for 95% intervals. According
+to Warton et al. (2006, 2012) those limits are obtained by inverting the
+one-sample test for the SMA slope, and <code><a href="../reference/ggsmatr.html">ggsmatr()</a></code> only maps
+them onto the plot.</p>
+<p>Because the fitted line is constrained to pass through the group mean
+<code>(xbar, ybar)</code>, slope and intercept are not independent. The
+presence of a slope interval is therefore converted to a family of lines
+through the same centroid:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y_low</span>  <span class="op">&lt;-</span> <span class="va">ybar</span> <span class="op">+</span> <span class="va">Slope_lowCI</span>  <span class="op">*</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="va">xbar</span><span class="op">)</span></span>
+<span><span class="va">y_high</span> <span class="op">&lt;-</span> <span class="va">ybar</span> <span class="op">+</span> <span class="va">Slope_highCI</span> <span class="op">*</span> <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="va">xbar</span><span class="op">)</span></span>
+<span><span class="va">ymin</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">y_low</span>, <span class="va">y_high</span><span class="op">)</span></span>
+<span><span class="va">ymax</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">y_low</span>, <span class="va">y_high</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin()</a></code> and <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax()</a></code> are required, because the
+lower slope produces the higher line when <code>x &lt; xbar</code>. The
+envelope pinches at the group mean and fans out toward the ends of the
+observed x range. This presents a slope-CI envelope, not a bootstrap
+prediction band and not a pointwise CI for E[Y | X].</p>
+<p>The numerical intervals can be inspected in the <code>smatr</code>
+object:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">groupsummary</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"Slope"</span>, <span class="st">"Slope_lowCI"</span>, <span class="st">"Slope_highCI"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;        group    Slope Slope_lowCI Slope_highCI</span></span>
+<span><span class="co">#&gt; 1     setosa 0.929894   0.7665449     1.128053</span></span>
+<span><span class="co">#&gt; 2 versicolor 1.644914   1.2882605     2.100306</span></span>
+<span><span class="co">#&gt; 3  virginica 1.971740   1.5274522     2.545258</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggsmatr.html">ggsmatr</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">df.iris</span>,</span>
 <span>  groups <span class="op">=</span> <span class="st">"Species"</span>,</span>
@@ -151,7 +176,7 @@ example <code>sma(..., alpha = 0.05)</code> for 95% intervals.</p>
 <p><img src="ggsmatr-example_files/figure-html/plot-sma-ci-1.png" class="r-plt" alt="" width="576"></p>
 <p>Transparency and smoothness of the ribbon can be controlled with
 <code>ci.alpha</code> and <code>n</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggsmatr.html">ggsmatr</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">df.iris</span>,</span>
 <span>  groups <span class="op">=</span> <span class="st">"Species"</span>,</span>
@@ -162,6 +187,17 @@ example <code>sma(..., alpha = 0.05)</code> for 95% intervals.</p>
 <span>  ci.alpha <span class="op">=</span> <span class="fl">0.15</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">150</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006).
+Bivariate line-fitting methods for allometry. <em>Biological
+Reviews</em> 81, 259–291.</p>
+<p>Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S.
+(2012). smatr 3 – an R package for estimation and inference about
+allometric lines. <em>Methods in Ecology and Evolution</em> 3,
+257–259.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

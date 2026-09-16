@@ -93,7 +93,7 @@
 </h3>
 <p>The confidence level of the ribbon is the one used in <code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">sma()</a></code>, for example <code>alpha = 0.05</code> for 95% intervals.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggsmatr</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mariosandovalmx/ggsmatr" class="external-link">ggsmatr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traitecoevo/smatr" class="external-link">smatr</a></span><span class="op">)</span></span>
 <span></span>
@@ -148,8 +148,22 @@
 <div class="float">
 <img src="reference/figures/iris-sma-ci.png" alt="Grouped SMA plot with parametric slope confidence ribbons"><div class="figcaption">Grouped SMA plot with parametric slope confidence ribbons</div>
 </div>
-<p>The ribbon can be tuned with <code>ci.alpha</code> (transparency) and <code>n</code> (number of x values evaluated in each group):</p>
+<div class="section level4">
+<h4 id="how-the-confidence-ribbon-is-calculated">How the confidence ribbon is calculated<a class="anchor" aria-label="anchor" href="#how-the-confidence-ribbon-is-calculated"></a>
+</h4>
+<p>The ribbon is <strong>not</strong> an OLS interval from <code>geom_smooth(se = TRUE)</code>, and it is not obtained by combining intercept CIs with slope CIs independently. SMA (and MA) lines are constrained to pass through the group centroid <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo>,</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\bar{x}, \bar{y})</annotation></semantics></math>, so slope and intercept are related with each other: the elevation is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>−</mo><mi>b</mi><mspace width="0.167em"></mspace><mover><mi>x</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\bar{y} - b\,\bar{x}</annotation></semantics></math>.</p>
+<p><code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">smatr::sma()</a></code> already constructs confidence intervals for the slope by inverting the one-sample slope test (Warton et al. 2006, 2012). Those limits are stored in <code>sma.fit$groupsummary</code> as <code>Slope_lowCI</code> and <code>Slope_highCI</code>. The confidence level is the one used when the model is fitted, for example <code>sma(..., alpha = 0.05)</code> for 95% intervals.</p>
+<p>Given the presence of a fitted SMA line through the centroid, <code><a href="reference/ggsmatr.html">ggsmatr()</a></code> maps that slope interval to a family of lines through the same point. For each group and each <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> along the observed range:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>+</mo><msub><mi>b</mi><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>y</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi></mrow></msub><mo>=</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>+</mo><msub><mi>b</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+y_{\mathrm{low}}  = \bar{y} + b_{\mathrm{low}}(x - \bar{x}), \qquad
+y_{\mathrm{high}} = \bar{y} + b_{\mathrm{high}}(x - \bar{x})
+</annotation></semantics></math></p>
+<p><code>ymin</code> and <code>ymax</code> are then taken with <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin()</a></code> / <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax()</a></code>, because the lower slope produces the higher line when <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>&lt;</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">x &lt; \bar{x}</annotation></semantics></math>. The resulting envelope pinches at the group mean and fans out toward the ends of the line. Users can inspect the numerical intervals with:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">groupsummary</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"Slope"</span>, <span class="st">"Slope_lowCI"</span>, <span class="st">"Slope_highCI"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p>What the ribbon presents is therefore a <strong>parametric slope-CI envelope</strong>. It does not include a separate intercept band, it is not a bootstrap prediction interval, and it is not a pointwise CI for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>Y</mi><mo>∣</mo><mi>X</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">E[Y \mid X]</annotation></semantics></math> as in ordinary least squares.</p>
+<p>The ribbon can be tuned with <code>ci.alpha</code> (transparency) and <code>n</code> (number of x values evaluated in each group):</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/ggsmatr.html">ggsmatr</a></span><span class="op">(</span></span>
 <span>  data     <span class="op">=</span> <span class="va">df.iris</span>,</span>
 <span>  groups   <span class="op">=</span> <span class="st">"Species"</span>,</span>
@@ -163,6 +177,7 @@
 <hr>
 </div>
 </div>
+</div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
@@ -172,7 +187,7 @@
 <li>
 <strong>SMA regression lines</strong> drawn automatically from a <code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">smatr::sma()</a></code> fit.</li>
 <li>
-<strong>Parametric confidence ribbons</strong> for the SMA slope, using the intervals already computed by <code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">sma()</a></code>.</li>
+<strong>Parametric confidence ribbons</strong> for the SMA slope, using the <code>smatr</code> slope CIs pivoted at each group centroid.</li>
 <li>
 <strong>Group-aware plotting</strong> with consistent color mappings across points, lines and ribbons.</li>
 <li>
@@ -209,6 +224,12 @@
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
 <p>Released under the MIT License.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006). Bivariate line-fitting methods for allometry. <em>Biological Reviews</em> 81, 259–291.</p>
+<p>Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012). smatr 3 – an R package for estimation and inference about allometric lines. <em>Methods in Ecology and Evolution</em> 3, 257–259.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

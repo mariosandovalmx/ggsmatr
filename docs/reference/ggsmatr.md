@@ -34,12 +34,7 @@ ggsmatr(data, groups, xvar, yvar, sma.fit, ci = FALSE, ci.alpha = 0.2, n = 100)
 - ci:
 
   logical. If TRUE, add a parametric confidence ribbon for the SMA
-  slope, using the slope confidence intervals stored in `sma.fit` (set
-  the level with `sma(..., alpha = )`). Given that SMA lines pass
-  through the group centroid, the ribbon is a slope-CI envelope pivoted
-  at each group mean, and it is not related with the OLS band of
-  [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html).
-  Default is FALSE.
+  slope. Default is FALSE.
 
 - ci.alpha:
 
@@ -56,6 +51,37 @@ ggsmatr(data, groups, xvar, yvar, sma.fit, ci = FALSE, ci.alpha = 0.2, n = 100)
 
 ggplot based plot of sma.
 
+## Details
+
+Fitted SMA/MA lines are drawn from the slope and elevation stored in
+`sma.fit`. When `ci = TRUE`, a ribbon is added from the slope confidence
+intervals already computed by
+[`smatr::sma()`](https://traitecoevo.github.io/smatr/reference/sma.html)
+(`Slope_lowCI` and `Slope_highCI` in `sma.fit$groupsummary`). The
+confidence level is the one used in `sma(..., alpha = )`.
+
+Given that SMA lines pass through the group centroid \\(\bar{x},
+\bar{y})\\, slope and intercept are not independent. The ribbon is
+therefore a family of lines through that centroid: \$\$y = \bar{y} +
+b\_{\mathrm{CI}}(x - \bar{x}).\$\$ `ymin` and `ymax` are obtained with
+[`pmin()`](https://rdrr.io/r/base/Extremes.html)/[`pmax()`](https://rdrr.io/r/base/Extremes.html),
+because the lower slope produces the higher line when \\x \< \bar{x}\\.
+The envelope pinches at the group mean and is not related with the OLS
+band of
+[`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html).
+It does not combine intercept CIs with slope CIs independently, and it
+is not a bootstrap prediction interval.
+
+## References
+
+Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006).
+Bivariate line-fitting methods for allometry. *Biological Reviews* 81,
+259–291.
+
+Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012).
+smatr 3 – an R package for estimation and inference about allometric
+lines. *Methods in Ecology and Evolution* 3, 257–259.
+
 ## Examples
 
 ``` r
@@ -65,7 +91,6 @@ df.iris <- read.csv(datafile, encoding = "UTF-8")
 library(ggsmatr)
 library(ggplot2)
 library(smatr)
-#> Warning: package 'smatr' was built under R version 4.6.1
 fit <- sma(Sepal.Length ~ Sepal.Width + Species,
            data = df.iris, shift = TRUE, elev.test = TRUE, alpha = 0.05)
 
@@ -75,16 +100,6 @@ ggsmatr(data = df.iris, groups = "Species",
   theme(legend.position = "top", legend.title = element_blank()) +
   ylab("Sepal.Length") +
   xlab("Sepal.Width")
-#>        group    r2  pval
-#> 1     setosa 0.551 0.000
-#> 2 versicolor 0.277 0.000
-#> 3  virginica 0.209 0.001
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the ggsmatr package.
-#>   Please report the issue at
-#>   <https://github.com/mariosandovalmx/ggsmatr/issues>.
-
 
 # parametric slope-CI ribbon, using the intervals already stored in the sma fit
 ggsmatr(data = df.iris, groups = "Species",
@@ -93,10 +108,4 @@ ggsmatr(data = df.iris, groups = "Species",
   theme(legend.position = "top", legend.title = element_blank()) +
   ylab("Sepal.Length") +
   xlab("Sepal.Width")
-#>        group    r2  pval Slope Slope_lowCI Slope_highCI
-#> 1     setosa 0.551 0.000 0.930       0.767        1.128
-#> 2 versicolor 0.277 0.000 1.645       1.288        2.100
-#> 3  virginica 0.209 0.001 1.972       1.527        2.545
-
-
 ```

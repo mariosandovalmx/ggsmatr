@@ -9,9 +9,34 @@
 #' @param xvar x variable for drawing.
 #' @param yvar y variable for drawing.
 #' @param sma.fit an sma or ma object fitted in SMATR package.
-#' @param ci logical. If TRUE, add a parametric confidence ribbon for the SMA slope, using the slope confidence intervals stored in `sma.fit` (set the level with `sma(..., alpha = )`). Given that SMA lines pass through the group centroid, the ribbon is a slope-CI envelope pivoted at each group mean, and it is not related with the OLS band of `geom_smooth()`. Default is FALSE.
+#' @param ci logical. If TRUE, add a parametric confidence ribbon for the SMA slope. Default is FALSE.
 #' @param ci.alpha Alpha transparency passed to [ggplot2::geom_ribbon()]. Default is 0.2.
 #' @param n Number of x values at which the confidence ribbon is evaluated in each group. Default is 100.
+#'
+#' @details
+#' Fitted SMA/MA lines are drawn from the slope and elevation stored in `sma.fit`.
+#' When `ci = TRUE`, a ribbon is added from the slope confidence intervals already
+#' computed by `smatr::sma()` (`Slope_lowCI` and `Slope_highCI` in
+#' `sma.fit$groupsummary`). The confidence level is the one used in
+#' `sma(..., alpha = )`.
+#'
+#' Given that SMA lines pass through the group centroid \eqn{(\bar{x}, \bar{y})},
+#' slope and intercept are not independent. The ribbon is therefore a family of
+#' lines through that centroid:
+#' \deqn{y = \bar{y} + b_{\mathrm{CI}}(x - \bar{x}).}
+#' `ymin` and `ymax` are obtained with `pmin()`/`pmax()`, because the lower slope
+#' produces the higher line when \eqn{x < \bar{x}}. The envelope pinches at the
+#' group mean and is not related with the OLS band of `geom_smooth()`. It does
+#' not combine intercept CIs with slope CIs independently, and it is not a
+#' bootstrap prediction interval.
+#'
+#' @references
+#' Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006).
+#' Bivariate line-fitting methods for allometry. *Biological Reviews* 81, 259–291.
+#'
+#' Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012).
+#' smatr 3 – an R package for estimation and inference about allometric lines.
+#' *Methods in Ecology and Evolution* 3, 257–259.
 #'
 #' @return ggplot based plot of sma.
 #' @export

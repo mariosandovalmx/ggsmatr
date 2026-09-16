@@ -14,8 +14,9 @@
   band.
 - The printed summary now includes `Slope`, `Slope_lowCI` and
   `Slope_highCI` when `ci = TRUE`.
-- Documentation, vignette and examples were updated to show the presence
-  of confidence ribbons in grouped SMA plots.
+- Documentation now explains how the ribbon is calculated: the slope
+  confidence intervals from smatr are mapped through each group centroid
+  as y = ybar + b_CI \* (x - xbar).
 
 ## ggsmatr 0.1
 

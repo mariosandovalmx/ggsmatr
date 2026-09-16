@@ -52,7 +52,7 @@ The confidence level of the ribbon is the one used in
 example `alpha = 0.05` for 95% intervals.
 
 \
-[`library`](https://rdrr.io/r/base/library.html)`(``ggsmatr``)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggsmatr`](https://github.com/mariosandovalmx/ggsmatr)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`\
 [`library`](https://rdrr.io/r/base/library.html)`(`[`smatr`](https://github.com/traitecoevo/smatr)`)`\
 \
@@ -81,6 +81,11 @@ example `alpha = 0.05` for 95% intervals.
 `  `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Sepal.Length"``)`` ``+`\
 `  `[`xlab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Sepal.Width"``)`
 
+![Grouped SMA plot for iris sepal width and sepal
+length](reference/figures/iris-sma.png)
+
+Grouped SMA plot for iris sepal width and sepal length
+
 ### 4. Add a parametric confidence ribbon
 
 SMA is not OLS, so `geom_smooth(se = TRUE)` is not related with the
@@ -102,6 +107,51 @@ envelope pivoted at each group centroid:
 `  ``)`` ``+`\
 `  `[`ylab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Sepal.Length"``)`` ``+`\
 `  `[`xlab`](https://ggplot2.tidyverse.org/reference/labs.html)`(``"Sepal.Width"``)`
+
+![Grouped SMA plot with parametric slope confidence
+ribbons](reference/figures/iris-sma-ci.png)
+
+Grouped SMA plot with parametric slope confidence ribbons
+
+#### How the confidence ribbon is calculated
+
+The ribbon is **not** an OLS interval from `geom_smooth(se = TRUE)`, and
+it is not obtained by combining intercept CIs with slope CIs
+independently. SMA (and MA) lines are constrained to pass through the
+group centroid $`(\bar{x}, \bar{y})`$, so slope and intercept are
+related with each other: the elevation is $`\bar{y} - b\,\bar{x}`$.
+
+[`smatr::sma()`](https://traitecoevo.github.io/smatr/reference/sma.html)
+already constructs confidence intervals for the slope by inverting the
+one-sample slope test (Warton et al. 2006, 2012). Those limits are
+stored in `sma.fit$groupsummary` as `Slope_lowCI` and `Slope_highCI`.
+The confidence level is the one used when the model is fitted, for
+example `sma(..., alpha = 0.05)` for 95% intervals.
+
+Given the presence of a fitted SMA line through the centroid,
+[`ggsmatr()`](https://mariosandovalmx.github.io/ggsmatr/reference/ggsmatr.md)
+maps that slope interval to a family of lines through the same point.
+For each group and each $`x`$ along the observed range:
+
+``` math
+y_{\mathrm{low}}  = \bar{y} + b_{\mathrm{low}}(x - \bar{x}), \qquad
+y_{\mathrm{high}} = \bar{y} + b_{\mathrm{high}}(x - \bar{x})
+```
+
+`ymin` and `ymax` are then taken with
+[`pmin()`](https://rdrr.io/r/base/Extremes.html) /
+[`pmax()`](https://rdrr.io/r/base/Extremes.html), because the lower
+slope produces the higher line when $`x < \bar{x}`$. The resulting
+envelope pinches at the group mean and fans out toward the ends of the
+line. Users can inspect the numerical intervals with:
+
+\
+`fit``$``groupsummary``[``, `[`c`](https://rdrr.io/r/base/c.html)`(``"group"``, ``"Slope"``, ``"Slope_lowCI"``, ``"Slope_highCI"``)``]`
+
+What the ribbon presents is therefore a **parametric slope-CI
+envelope**. It does not include a separate intercept band, it is not a
+bootstrap prediction interval, and it is not a pointwise CI for
+$`E[Y \mid X]`$ as in ordinary least squares.
 
 The ribbon can be tuned with `ci.alpha` (transparency) and `n` (number
 of x values evaluated in each group):
@@ -127,9 +177,8 @@ of x values evaluated in each group):
 - **SMA regression lines** drawn automatically from a
   [`smatr::sma()`](https://traitecoevo.github.io/smatr/reference/sma.html)
   fit.
-- **Parametric confidence ribbons** for the SMA slope, using the
-  intervals already computed by
-  [`sma()`](https://traitecoevo.github.io/smatr/reference/sma.html).
+- **Parametric confidence ribbons** for the SMA slope, using the `smatr`
+  slope CIs pivoted at each group centroid.
 - **Group-aware plotting** with consistent color mappings across points,
   lines and ribbons.
 - **Fully customizable** — labels, themes, legends, and more.
@@ -149,3 +198,13 @@ of x values evaluated in each group):
 ## License
 
 Released under the MIT License.
+
+## References
+
+Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006).
+Bivariate line-fitting methods for allometry. *Biological Reviews* 81,
+259–291.
+
+Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012).
+smatr 3 – an R package for estimation and inference about allometric
+lines. *Methods in Ecology and Evolution* 3, 257–259.

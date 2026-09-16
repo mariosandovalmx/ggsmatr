@@ -41,7 +41,7 @@
 <ul><li>Added an optional parametric confidence ribbon in <code><a href="../reference/ggsmatr.html">ggsmatr()</a></code> through the new arguments <code>ci</code>, <code>ci.alpha</code> and <code>n</code>.</li>
 <li>The ribbon uses the slope confidence intervals already stored in the <code><a href="https://traitecoevo.github.io/smatr/reference/sma.html" class="external-link">sma()</a></code> fit (<code>Slope_lowCI</code> and <code>Slope_highCI</code>) and is pivoted at each group centroid. Given that SMA lines pass through the group mean, this envelope presents the uncertainty of the slope rather than an OLS <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code> band.</li>
 <li>The printed summary now includes <code>Slope</code>, <code>Slope_lowCI</code> and <code>Slope_highCI</code> when <code>ci = TRUE</code>.</li>
-<li>Documentation, vignette and examples were updated to show the presence of confidence ribbons in grouped SMA plots.</li>
+<li>Documentation now explains how the ribbon is calculated: the slope confidence intervals from smatr are mapped through each group centroid as y = ybar + b_CI * (x - xbar).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1" id="ggsmatr-01">ggsmatr 0.1<a class="anchor" aria-label="anchor" href="#ggsmatr-01"></a></h2>

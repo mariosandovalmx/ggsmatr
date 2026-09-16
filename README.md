@@ -99,6 +99,27 @@ ggsmatr(
 
 ![Grouped SMA plot with parametric slope confidence ribbons](man/figures/iris-sma-ci.png)
 
+#### How the confidence ribbon is calculated
+
+The ribbon is **not** an OLS interval from `geom_smooth(se = TRUE)`, and it is not obtained by combining intercept CIs with slope CIs independently. SMA (and MA) lines are constrained to pass through the group centroid $(\bar{x}, \bar{y})$, so slope and intercept are related with each other: the elevation is $\bar{y} - b\,\bar{x}$.
+
+`smatr::sma()` already constructs confidence intervals for the slope by inverting the one-sample slope test (Warton et al. 2006, 2012). Those limits are stored in `sma.fit$groupsummary` as `Slope_lowCI` and `Slope_highCI`. The confidence level is the one used when the model is fitted, for example `sma(..., alpha = 0.05)` for 95% intervals.
+
+Given the presence of a fitted SMA line through the centroid, `ggsmatr()` maps that slope interval to a family of lines through the same point. For each group and each $x$ along the observed range:
+
+$$
+y_{\mathrm{low}}  = \bar{y} + b_{\mathrm{low}}(x - \bar{x}), \qquad
+y_{\mathrm{high}} = \bar{y} + b_{\mathrm{high}}(x - \bar{x})
+$$
+
+`ymin` and `ymax` are then taken with `pmin()` / `pmax()`, because the lower slope produces the higher line when $x < \bar{x}$. The resulting envelope pinches at the group mean and fans out toward the ends of the line. Users can inspect the numerical intervals with:
+
+```r
+fit$groupsummary[, c("group", "Slope", "Slope_lowCI", "Slope_highCI")]
+```
+
+What the ribbon presents is therefore a **parametric slope-CI envelope**. It does not include a separate intercept band, it is not a bootstrap prediction interval, and it is not a pointwise CI for $E[Y \mid X]$ as in ordinary least squares.
+
 The ribbon can be tuned with `ci.alpha` (transparency) and `n` (number of x values evaluated in each group):
 
 ```r
@@ -120,7 +141,7 @@ ggsmatr(
 
 - **Seamless integration** with `ggplot2` — chain any layer or theme you like.
 - **SMA regression lines** drawn automatically from a `smatr::sma()` fit.
-- **Parametric confidence ribbons** for the SMA slope, using the intervals already computed by `sma()`.
+- **Parametric confidence ribbons** for the SMA slope, using the `smatr` slope CIs pivoted at each group centroid.
 - **Group-aware plotting** with consistent color mappings across points, lines and ribbons.
 - **Fully customizable** — labels, themes, legends, and more.
 
@@ -139,3 +160,9 @@ ggsmatr(
 ## License
 
 Released under the MIT License.
+
+## References
+
+Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006). Bivariate line-fitting methods for allometry. *Biological Reviews* 81, 259–291.
+
+Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012). smatr 3 – an R package for estimation and inference about allometric lines. *Methods in Ecology and Evolution* 3, 257–259.

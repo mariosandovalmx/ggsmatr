@@ -17,7 +17,7 @@ ggsmatr(data, groups, xvar, yvar, sma.fit, ci = FALSE, ci.alpha = 0.2, n = 100)
 
 \item{sma.fit}{an sma or ma object fitted in SMATR package.}
 
-\item{ci}{logical. If TRUE, add a parametric confidence ribbon for the SMA slope, using the slope confidence intervals stored in \code{sma.fit} (set the level with \code{sma(..., alpha = )}). Given that SMA lines pass through the group centroid, the ribbon is a slope-CI envelope pivoted at each group mean, and it is not related with the OLS band of \code{geom_smooth()}. Default is FALSE.}
+\item{ci}{logical. If TRUE, add a parametric confidence ribbon for the SMA slope. Default is FALSE.}
 
 \item{ci.alpha}{Alpha transparency passed to \code{\link[ggplot2:geom_ribbon]{ggplot2::geom_ribbon()}}. Default is 0.2.}
 
@@ -28,6 +28,23 @@ ggplot based plot of sma.
 }
 \description{
 Create a scatter plot based on the coefficients from (Standardised) Major Axis Estimation fit.
+}
+\details{
+Fitted SMA/MA lines are drawn from the slope and elevation stored in \code{sma.fit}.
+When \code{ci = TRUE}, a ribbon is added from the slope confidence intervals already
+computed by \code{smatr::sma()} (\code{Slope_lowCI} and \code{Slope_highCI} in
+\code{sma.fit$groupsummary}). The confidence level is the one used in
+\code{sma(..., alpha = )}.
+
+Given that SMA lines pass through the group centroid \eqn{(\bar{x}, \bar{y})},
+slope and intercept are not independent. The ribbon is therefore a family of
+lines through that centroid:
+\deqn{y = \bar{y} + b_{\mathrm{CI}}(x - \bar{x}).}
+\code{ymin} and \code{ymax} are obtained with \code{pmin()}/\code{pmax()}, because the lower slope
+produces the higher line when \eqn{x < \bar{x}}. The envelope pinches at the
+group mean and is not related with the OLS band of \code{geom_smooth()}. It does
+not combine intercept CIs with slope CIs independently, and it is not a
+bootstrap prediction interval.
 }
 \examples{
 datafile <- system.file("iris.csv", package = "ggsmatr")
@@ -55,4 +72,12 @@ ggsmatr(data = df.iris, groups = "Species",
   xlab("Sepal.Width")
 
 
+}
+\references{
+Warton, D. I., Wright, I. J., Falster, D. S. and Westoby, M. (2006).
+Bivariate line-fitting methods for allometry. \emph{Biological Reviews} 81, 259–291.
+
+Warton, D. I., Duursma, R. A., Falster, D. S. and Taskinen, S. (2012).
+smatr 3 – an R package for estimation and inference about allometric lines.
+\emph{Methods in Ecology and Evolution} 3, 257–259.
 }
