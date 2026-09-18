@@ -1,10 +1,29 @@
-citHeader("To cite ggsmatr in publications use:")
+citHeader("To cite ggsmatr in publications, please use:")
 
 bibentry(
   bibtype = "Manual",
-  title   = "ggsmatr: ggplot2 based plots for (standardised) major axis estimation",
-  author  = person("Mario A.", "Sandoval-Molina"),
+  title   = "ggsmatr: ggplot2 Based Plots for (Standardised) Major Axis Estimation",
+  author  = person(
+    given   = "Mario A.",
+    family  = "Sandoval-Molina",
+    email   = "sandoval.m@hotmail.com",
+    comment = c(ORCID = "0000-0002-8536-6006")
+  ),
   year    = "2026",
   note    = "R package version 0.2.0",
-  url     = "https://github.com/mariosandovalmx/ggsmatr"
+  doi     = "10.5281/zenodo.22737761",
+  url     = "https://github.com/mariosandovalmx/ggsmatr",
+  textVersion = paste(
+    "Sandoval-Molina, M. A. (2026).",
+    "ggsmatr: ggplot2 based plots for (standardised) major axis estimation",
+    "(R package version 0.2.0).",
+    "https://doi.org/10.5281/zenodo.22737761"
+  )
 )
+
+citFooter(paste(
+  "Please prefer the Zenodo DOI above when citing the software,",
+  "so that citations can be tracked. The GitHub repository presents",
+  "the source code and development history:",
+  "https://github.com/mariosandovalmx/ggsmatr"
+))

@@ -157,6 +157,18 @@ ggsmatr(
 
 ---
 
+## Citation
+
+If you use `ggsmatr` in your work, please cite the software. The preferred citation is the Zenodo DOI, which allows citation tracking:
+
+```r
+citation("ggsmatr")
+```
+
+Sandoval-Molina, M. A. (2026). *ggsmatr: ggplot2 based plots for (standardised) major axis estimation* (R package version 0.2.0). https://doi.org/10.5281/zenodo.22737761
+
+The source code is available at [GitHub](https://github.com/mariosandovalmx/ggsmatr).
+
 ## License
 
 Released under the MIT License.
